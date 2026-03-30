@@ -1,6 +1,6 @@
 import { useQuoridor } from '../hooks/useQuoridor';
 import Board from './Board';
-import ControlPanel from './ControlPanel';
+// import ControlPanel from './ControlPanel';
 import InfoBar from './InfoBar';
 
 export default function QuoridorGame() {
