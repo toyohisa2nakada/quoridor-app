@@ -2,12 +2,12 @@
 // Quoridor AI Logic (TypeScript Version)
 // ============================================================
 
-export type Player = 0 | 1;
-export type WallType = number; // 0/1 or 1/2 depending on the internal function
-export type MoveCommand = 0 | 1 | 2; // 0: Move, 1: H-Wall, 2: V-Wall
-export type MoveAction = [MoveCommand, number, number]; // [cmd, index, eval_score]
+// type Player = 0 | 1;
+type WallType = number; // 0/1 or 1/2 depending on the internal function
+type MoveCommand = 0 | 1 | 2; // 0: Move, 1: H-Wall, 2: V-Wall
+type MoveAction = [MoveCommand, number, number]; // [cmd, index, eval_score]
 
-export interface AIStateInput {
+interface AIStateInput {
   p0: number;
   p1: number;
   n_p0_wall: number;
@@ -33,7 +33,7 @@ interface WallIndexInfo {
 }
 
 // Get the target index and blocking wall indices based on move direction
-export function m2windex(p: number, hv: number, di: number): WallIndexInfo {
+function m2windex(p: number, hv: number, di: number): WallIndexInfo {
   const d = di === 1 ? 0 : -1;
   const w_type = hv === 1 ? 0 : 1;
   if (hv === 0) {
@@ -46,7 +46,7 @@ export function m2windex(p: number, hv: number, di: number): WallIndexInfo {
 }
 
 // Check if there is NO wall at a specific wall index
-export function nowall(w_type: number, i: number, ws: number[][]): boolean {
+function nowall(w_type: number, i: number, ws: number[][]): boolean {
   if (i <= -2 || i >= 72) return w_type === 1; // Outer boundaries
   if ((i % 9 + 9) % 9 === 8) return w_type === 0;
 
@@ -70,14 +70,14 @@ function actions(w_indexes: WallIndexInfo[], ws: number[][]): number[] {
 }
 
 // Get valid movement candidates for a piece (without jump considering yet)
-export function find_p_candidates(p_index: number, h_walls: number[], v_walls: number[]): number[] {
+function find_p_candidates(p_index: number, h_walls: number[], v_walls: number[]): number[] {
   const ws = [h_walls, v_walls];
   const w_indexes = [[0, 1], [0, -1], [1, 1], [1, -1]].map(x => m2windex(p_index, x[0], x[1]));
   return actions(w_indexes, ws);
 }
 
 // Add jump actions if moving onto enemy piece
-export function trans_p_candidate_with_jump(
+function trans_p_candidate_with_jump(
   acts1: number[], p_index: number, e_index: number, h_walls: number[], v_walls: number[]
 ): [number[], number[]] {
   const p0 = p_index, p1 = e_index;
@@ -108,7 +108,7 @@ export function trans_p_candidate_with_jump(
 }
 
 // Find path using A*
-export function find_route(p_index: number, e_index: number, h_walls: number[], v_walls: number[], g_line: number = 0): number[] {
+function find_route(p_index: number, e_index: number, h_walls: number[], v_walls: number[], g_line: number = 0): number[] {
   const goals = g_line === 2 ? [] : Array.from({ length: 9 }, (_, i) => g_line * 72 + i);
   const didis_goal = (p: number) => g_line !== 2 ? Math.abs(8 * g_line - Math.floor(p / 9)) : 0;
 
@@ -163,7 +163,7 @@ export function find_route(p_index: number, e_index: number, h_walls: number[], 
 }
 
 // Check if route exists, ignoring enemy piece
-export function is_route(p_index: number, h_walls: number[], v_walls: number[], g_line: number): boolean {
+function is_route(p_index: number, h_walls: number[], v_walls: number[], g_line: number): boolean {
   const goals = Array.from({ length: 9 }, (_, i) => g_line * 72 + i);
   const candidates = g_line === 0
     ? [[1, -1], [0, 1], [0, -1], [1, 1]]
@@ -189,7 +189,7 @@ export function is_route(p_index: number, h_walls: number[], v_walls: number[], 
 }
 
 // Check if placing a wall is prevented by other walls
-export function prevents_by_walls(w_type: WallType, w_index: number, h_walls: number[], v_walls: number[]): boolean {
+function prevents_by_walls(w_type: WallType, w_index: number, h_walls: number[], v_walls: number[]): boolean {
   const row = (i: number) => Math.floor(i / 8);
   const col = (i: number) => i % 8;
 
@@ -201,7 +201,7 @@ export function prevents_by_walls(w_type: WallType, w_index: number, h_walls: nu
 
 // Check if a new wall completely blocks any player's route to goal
 // Returns [blocks_route, quality_score]
-export function prevents_by_route(
+function prevents_by_route(
   w_type: number, w_index: number, p0: number, p1: number,
   h_walls: number[], v_walls: number[], g_line: number, quality = false
 ): [boolean, number] {
@@ -224,7 +224,7 @@ export function prevents_by_route(
 }
 
 // Get all possible wall placements
-export function avaiable_walls(h_walls: number[], v_walls: number[]): [WallType, number][] {
+function avaiable_walls(h_walls: number[], v_walls: number[]): [WallType, number][] {
   const result: [WallType, number][] = [];
   for (let i = 0; i < 64; i++) {
     if (!prevents_by_walls(1, i, h_walls, v_walls)) result.push([1, i]);
@@ -234,7 +234,7 @@ export function avaiable_walls(h_walls: number[], v_walls: number[]): [WallType,
 }
 
 // Find all AI candidates (moves + wall placements)
-export function find_candidates(state: GameState, quality = false): MoveAction[] {
+function find_candidates(state: GameState, quality = false): MoveAction[] {
   const { p0, p1, h_walls, v_walls, g_line, n_p0_wall } = state;
   const ai_r0 = find_route(p0, p1, h_walls, v_walls, g_line);
   const hu_r0 = find_route(p1, p0, h_walls, v_walls, 1 - g_line);

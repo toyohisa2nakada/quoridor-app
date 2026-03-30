@@ -14,10 +14,11 @@ export default function ControlPanel({ game, scaleBase }: ControlPanelProps) {
   };
 
   const buttons = [
-    { label: 'BACK', onClick: game.undoMove, colorClass: 'bg-gray-500 hover:bg-gray-600 active:bg-gray-700' },
-    { label: 'RESET', onClick: game.resetGame, colorClass: 'bg-gray-500 hover:bg-gray-600 active:bg-gray-700' },
-    { label: 'HL', onClick: game.toggleHighlight, colorClass: 'bg-gray-500 hover:bg-gray-600 active:bg-gray-700' },
-    { label: 'WALL', onClick: game.toggleGrayWalls, colorClass: 'bg-gray-500 hover:bg-gray-600 active:bg-gray-700' },
+    { label: 'やり直し', onClick: game.resetGame, colorClass: 'bg-gray-500 hover:bg-gray-600 active:bg-gray-700' },
+    // リセットは対AIだとあまり機能しない。HLはプレイヤの動ける位置をハイライトするがいろいろデバッグしていないのでいったんカット、WALLは壁の色を変えるだけで意味がなくカット
+    // { label: 'BACK', onClick: game.undoMove, colorClass: 'bg-gray-500 hover:bg-gray-600 active:bg-gray-700' },
+    // { label: 'HL', onClick: game.toggleHighlight, colorClass: 'bg-gray-500 hover:bg-gray-600 active:bg-gray-700' },
+    // { label: 'WALL', onClick: game.toggleGrayWalls, colorClass: 'bg-gray-500 hover:bg-gray-600 active:bg-gray-700' },
   ];
 
   return (

@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import type { GameState } from '../game/quoridor';
-import { next_ai } from '../game/quoridor';
+import type { GameState } from '../game/quoridor_ai';
+import { next_ai } from '../game/quoridor_ai';
 
 export type PlayerType = 'human' | 'ai';
 

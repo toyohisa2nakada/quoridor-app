@@ -1,6 +1,5 @@
 import { useQuoridor } from '../hooks/useQuoridor';
 import clsx from 'clsx';
-import { find_p_candidates } from '../game/quoridor';
 
 interface BoardProps {
   game: ReturnType<typeof useQuoridor>;
@@ -14,14 +13,15 @@ export default function Board({ game, scaleBase }: BoardProps) {
   // Derive valid moves for the current player
   const p_candidates: number[] = [];
   if (state.winner === null) {
-    p_candidates.push(...find_p_candidates(
-        state.turn === 0 ? state.p0 : state.p1, 
-        state.h_walls, 
-        state.v_walls
-    ));
-    // Ideally jump candidates too, but let's keep it simple or implement trans_p_candidate_with_jump
-    // Note: simple highlight logic might not include jumps for UI unless we fully translate it in the component
-    // But let's check valid moves on click anyway.
+    // プレイヤが移動できるところを画面上で示すために、find_p_candidatesを使用していた。
+    // しかし相手の駒をジャンプするところができていない、かつ、game/quoridor_aiをこのBoardから参照するのは
+    // コンポーネントの独立性よりちょっと、なのでコメントアウトして機能を発動しない。
+
+    // p_candidates.push(...find_p_candidates(
+    //     state.turn === 0 ? state.p0 : state.p1, 
+    //     state.h_walls, 
+    //     state.v_walls
+    // ));
   }
 
   // Generate grids (81 cells)
