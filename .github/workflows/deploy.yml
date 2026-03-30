@@ -33,7 +33,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Viteのデフォルト出力ディレクトリであるdistを指定
           path: ./dist
 
   deploy:
