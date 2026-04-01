@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useQuoridor } from '../hooks/useQuoridor';
 import Board from './Board';
 // import ControlPanel from './ControlPanel';
@@ -6,11 +7,24 @@ import InfoBar from './InfoBar';
 export default function QuoridorGame() {
   const game = useQuoridor();
 
-  // Basic scaling factor `bs` (e.g., bs = 10px -> total width = 520px)
-  const scaleBase = 10;
+  // Basic scaling factor `scaleBase`, dynamically calculated based on window size
+  const [scaleBase, setScaleBase] = useState(10);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Allow padding around the board container. Total board width is 52 units.
+      const availableWidth = window.innerWidth - 32;
+      const calculatedScale = Math.min(8, Math.max(3, availableWidth / 52));
+      setScaleBase(calculatedScale);
+    };
+
+    handleResize(); // Initial measurement
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <div className="flex bg-white shadow-xl rounded-lg p-6 flex-col md:flex-row gap-6 items-start">
+    <div className="flex bg-white shadow-xl rounded-lg p-3 sm:p-6 flex-col md:flex-row gap-4 sm:gap-6 items-start">
       <div className="flex flex-col relative w-max">
         {game.state.winner !== null && (
           <div className="absolute top-0 left-0 w-full z-50 p-4 text-center bg-green-100 text-green-800 font-bold rounded-lg mb-4 shadow-md">
